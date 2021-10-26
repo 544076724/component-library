@@ -1,0 +1,67 @@
+import { Meta, Story, Canvas, ArgsTable,Preview } from '@storybook/addon-docs/blocks'
+import CDhnText from '../'
+import '../../theme-chalk/src/text.scss'
+
+<Meta title='DHNUIDOCS/Text 文本'/>
+
+
+export const Template  = (args) => ({
+  setup () {
+   
+    return {
+      args
+    }
+  },
+  components: { CDhnText },
+  template: `
+  <div>
+    <c-dhn-text style="width:100px"  v-bind="args">文字超出超长文字测试dome测试</c-dhn-text>
+  </div>
+  `
+})
+
+# text 文本
+
+
+#### 基本使用说明
+
+
+<Preview>
+  <Story name='basic' args={{
+        weight:true,
+        isBreak:true,
+    }}>
+    { Template.bind({})}
+  </Story>
+</Preview>
+
+
+```javascript
+<template>
+  <div>
+    <c-dhn-text  :weight="weight" :isBreak="isBreak" style="width:100px">文字超出超长文字测试dome测试</c-dhn-text>
+  </div>
+</template>
+<script>
+  export default {
+    data () {
+      return {
+          weight:true,
+          isBreak:true,
+      }
+    }
+  }
+</script>
+```
+
+
+### 动态参数
+
+动态参数调试你可以 跳转
+
+[Go to text动态参数调试](?path=/docs/dhnui-text--index)
+
+
+### 参数说明
+
+<ArgsTable of={CDhnText}/>

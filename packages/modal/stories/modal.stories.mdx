@@ -1,0 +1,128 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Preview
+} from '@storybook/addon-docs/blocks'
+import CDhnModal from '../'
+
+<Meta title='DHNUIDOCS/CDhnModal 弹框' />
+
+
+# Modal 弹框
+
+
+#### 基本使用说明
+
+<Preview>
+  <Story name='basic1'>
+      {{
+          data(){
+              return {
+                  visible:false
+              }
+          },
+          methods:{
+              handleClose(){
+                  this.visible=false
+              },
+              showModal(){
+                   this.visible=true
+              }
+          },
+          components: { CDhnModal },
+          template:`<div style="position:relative;">
+                <button @click="showModal">展示</button>
+                <c-dhn-modal :visible="visible" @handleClose=handleClose>
+                    <template #title>
+                        title名称
+                    </template>
+                    <div style="width:300px;height:400px">
+                        <h2>这是内容</h2>
+                    </div>
+                    <template #footer> 这是页脚</template>
+                </c-dhn-modal>
+              </div>`
+      }}
+  </Story>
+</Preview>
+
+```javascript
+<template>
+    <div style="position:relative;">
+        <button @click="showModal">展示</button>
+        <c-dhn-modal :visible="visible" @handleClose=handleClose>
+            <template #title>
+                title名称
+            </template>
+            <div style="width:300px;height:400px">
+                <h2>这是内容</h2>
+            </div>
+            <template #footer> 这是页脚</template>
+        </c-dhn-modal>
+    </div>
+</template>
+<script>
+  export default {
+    data(){
+        return {
+            visible:false
+        }
+    },
+    methods:{
+        handleClose(){
+            this.visible=false
+        },
+        showModal(){
+            this.visible=true
+        }
+    },
+  }
+</script>
+```
+
+
+
+#### Modal Attributes
+
+
+ <table width="100%">
+    <thead>
+        <tr>
+            <th>参数</th>
+            <th>说明</th>
+            <th>类型</th>
+            <th>默认值</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>visible</td>
+            <td>是否展示</td>
+            <td>boolean</td>
+            <td>false</td>
+        </tr>
+        <tr>
+            <td>插槽slot title</td>
+            <td>展示头部</td>
+            <td>HTMLElement</td>
+            <td>null</td>
+        </tr>
+        <tr>
+            <td>插槽slot footer</td>
+            <td>展示页脚</td>
+            <td>HTMLElement</td>
+            <td>null</td>
+        </tr>
+        <tr>
+            <td>handleClose</td>
+            <td>关闭时间</td>
+            <td>()=>void</td>
+            <td>null</td>
+        </tr>
+    </tbody>
+    </table>
+
+
+

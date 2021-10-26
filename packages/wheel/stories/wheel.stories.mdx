@@ -1,0 +1,1174 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Preview
+} from '@storybook/addon-docs/blocks'
+import CDhnWheel from '../'
+
+<Meta title='DHNUIDOCS/CDhnWheel 转盘' />
+
+# wheel 转盘 使用说明
+
+#### 为了使得大转盘始终是一个圆，所以这里不支持 paddingLeft、paddingRight、paddingTop、paddingBottom 等属性
+
+### 参数说明
+
+## blocks
+
+- blocks?: Array< object > 非必填
+
+对象属性
+
+<table width='100%'>
+  <thead>
+    <tr>
+      <th>属性</th>
+      <th>必填</th>
+      <th>说明</th>
+      <th>类型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>padding</td>
+      <td>false</td>
+      <td>string</td>
+      <td>
+        内边距 （为了保证大转盘是一个标准的圆, 所以 padding 只能输入一个值）
+      </td>
+    </tr>
+    <tr>
+      <td>background</td>
+      <td>false</td>
+      <td>string</td>
+      <td>背景颜色 （可填写16进制颜色哈希值或 rgba）</td>
+    </tr>
+    <tr>
+      <td>imgs</td>
+      <td>false</td>
+      <td>Arrary[ object ]</td>
+      <td>图片背景列表</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan='3'>
+        <table width='100%'>
+          <thead>
+            <tr>
+              <th>属性</th>
+              <th>必填</th>
+              <th>说明</th>
+              <th>类型</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>src</td>
+              <td>true</td>
+              <td>图片路径</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>top</td>
+              <td>false</td>
+              <td>距离顶部的高度 （可以写 20px 也可以是 20%，默认为 0）</td>
+              <td>string | number</td>
+            </tr>
+            <tr>
+              <td>width</td>
+              <td>false</td>
+              <td> 图片宽度 （关于图片宽高有四种可能）</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>height</td>
+              <td>false</td>
+              <td>图片高度 （关于图片宽高有四种可能）</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>rotate</td>
+              <td>false</td>
+              <td>是否跟随旋转 （默认为 false）</td>
+              <td>boolean</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+imgs 中 object 的 width,height 说明
+
+1. 宽高都未设置：则使用图片原大小；
+2. 有宽度无高度：则高度随着宽度等比缩放；
+3. 有高度无宽度：则宽度随着高度等比缩放；
+4. 既有宽度也有高度：则图片宽高均等于设置的值（会被拉伸）
+
+<Preview>
+  <Story name='basic1'>
+    {{
+      components: { CDhnWheel },
+      template: `<c-dhn-wheel
+                width="200px"
+                height="200px"
+                :blocks="[
+                    { padding: '10px', background: '#ffc27a' },
+                    { padding: '10px', background: '#ff4a4c' },
+                    { padding: '0px', background: '#fff' }
+                ]"
+            >
+            </c-dhn-wheel>`
+    }}
+  </Story>
+</Preview>
+
+```javascript
+<template>
+  <c-dhn-wheel
+    width="200px"
+    height="200px"
+    :blocks="blocks"
+  />
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      blocks: [
+        { padding: '10px', background: '#ffc27a' },
+        { padding: '10px', background: '#ff4a4c' },
+        { padding: '0px', background: '#fff' }
+      ]
+    }
+  }
+}
+</script>
+```
+
+背景图
+
+1. rotate 用来控制背景图是否跟随旋转, 默认为 false 不旋转
+2. 如果你的背景图里面就自带了奖品, 那你依然要控制好 prizes 的数量, 以及 defaultConfig.offsetDegree, 因为我必须知道你有几个奖品才能准确的抽奖
+3. 理论上来说, 你可以仅凭一张背景图和一个按钮图片完成抽奖需求
+
+<Preview>
+  <Story name='basic2'>
+    {{
+      components: { CDhnWheel },
+      data () {
+        return {
+          blocks: [
+            { padding: '20px', background: '#ffc27a' },
+            {
+              padding: '20px',
+              imgs: [
+                {
+                  src: require('./temp.png'),
+                  width: '100%',
+                  rotate: true
+                }
+              ]
+            }
+          ],
+          prizes: [
+            { name: '0' },
+            { name: '1' },
+            { name: '2' },
+            { name: '3' },
+            { name: '4' },
+            { name: '5' },
+            { name: '6' },
+            { name: '7' }
+          ],
+          buttons: [
+            {
+              fonts: [{ text: 'Go', top: -12 }],
+              radius: '22%',
+              background: '#2da3e0',
+              pointer: true
+            }
+          ]
+        }
+      },
+      methods: {
+        startCallBack () {
+          this.$refs.LuckyWheel.play()
+          setTimeout(() => {
+            this.$refs.LuckyWheel.stop((Math.random() * 8) >> 0)
+          }, 1000)
+        }
+      },
+      template: `<c-dhn-wheel
+              ref="LuckyWheel"
+            width="240px"
+            height="240px"
+            :blocks="blocks"
+            :prizes="prizes"
+            :buttons="buttons"
+            @start="startCallBack"
+            >
+            </c-dhn-wheel>`
+    }}
+  </Story>
+</Preview>
+
+```javascript
+<template>
+  <c-dhn-wheel
+    ref="LuckyWheel"
+    width="240px"
+    height="240px"
+    :blocks="blocks"
+    :prizes="prizes"
+    :buttons="buttons"
+    @start="startCallBack"
+  />
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      blocks: [
+        { padding: '20px',background: '#ffc27a'  },
+        {
+          padding: '20px',
+          imgs: [{
+            src: require('./temp.png'),
+            width: '100%',
+            rotate: true
+          }]
+        }
+      ],
+      prizes: [
+        { name: '0' },
+        { name: '1' },
+        { name: '2' },
+        { name: '3' },
+        { name: '4' },
+        { name: '5' },
+        { name: '6' },
+        { name: '7' },
+      ],
+      buttons: [{
+        fonts: [{ text: 'Go', top: -12 }],
+        radius: '22%',
+        background: '#2da3e0',
+        pointer: true
+      }],
+    }
+  },
+  methods: {
+    startCallBack () {
+      this.$refs.LuckyWheel.play()
+      setTimeout(() => {
+        this.$refs.LuckyWheel.stop(Math.random() * 8 >> 0)
+      }, 1000)
+    },
+  }
+}
+</script>
+```
+
+## prizes 奖品
+
+奖品列表是一个数组，转盘会根据奖品数量来分配扇形区域
+
+- prizes?: Array< object > 奖品列表 非必填
+
+对象属性
+
+<table width='100%'>
+  <thead>
+    <tr>
+      <th>属性</th>
+      <th>必填</th>
+      <th>说明</th>
+      <th>类型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>range</td>
+      <td>false</td>
+      <td>number</td>
+      <td>中奖概率</td>
+    </tr>
+    <tr>
+      <td>background</td>
+      <td>false</td>
+      <td>string</td>
+      <td>扇形背景色 （可继承 defaultStyle 背景色，默认为 'rgba(0,0,0,0)'）</td>
+    </tr>
+    <tr>
+      <td>fonts</td>
+      <td>false</td>
+      <td>Arrary[ object ]</td>
+      <td>文字列表</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan='3'>
+        <table width='100%'>
+          <thead>
+            <tr>
+              <th>属性</th>
+              <th>必填</th>
+              <th>说明</th>
+              <th>类型</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>text</td>
+              <td>true</td>
+              <td>字体内容 （可以使用 \n 用来换行）</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>top</td>
+              <td>false</td>
+              <td>距离顶部的高度 （格式为：20 | '20px' | '20%'，默认为 0）</td>
+              <td>string | number</td>
+            </tr>
+            <tr>
+              <td>fontColor</td>
+              <td>false</td>
+              <td> 字体颜色 （可继承 defaultStyle 字体颜色，默认为 '#000'）</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>fontSize</td>
+              <td>false</td>
+              <td>
+                字体大小(px) （可继承 defaultStyle 字体大小，默认为 '22px'）
+              </td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>fontStyle</td>
+              <td>false</td>
+              <td>
+                字体样式 （可继承 defaultStyle 字体样式，默认为 'sans-serif'）
+              </td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>fontWeight</td>
+              <td>false</td>
+              <td>字体粗细 （可继承 defaultStyle 字体粗细，默认为 '400'）</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>lineHeight</td>
+              <td>false</td>
+              <td>字体行高 （默认等于字体大小）</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>wordWrap</td>
+              <td>false</td>
+              <td>文字自动换行 （默认为 true 开启，关闭时可以使用 \n 换行）</td>
+              <td>boolean</td>
+            </tr>
+            <tr>
+              <td>lengthLimit</td>
+              <td>false</td>
+              <td>
+                {' '}
+                换行宽度限制 （格式为：90 | '90px' | '90%'，默认为 '90%'）
+              </td>
+              <td>string | number</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>imgs</td>
+      <td>false</td>
+      <td>Arrary[ object ]</td>
+      <td>图片扇形项列表</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan='3'>
+        <table width='100%'>
+          <thead>
+            <tr>
+              <th>属性</th>
+              <th>必填</th>
+              <th>说明</th>
+              <th>类型</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>src</td>
+              <td>true</td>
+              <td>图片路径</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>top</td>
+              <td>false</td>
+              <td>距离顶部的高度 （可以写 20px 也可以是 20%，默认为 0）</td>
+              <td>string | number</td>
+            </tr>
+            <tr>
+              <td>width</td>
+              <td>false</td>
+              <td> 图片宽度 （关于图片宽高有四种可能）</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>height</td>
+              <td>false</td>
+              <td>图片高度 （关于图片宽高有四种可能）</td>
+              <td>string</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+imgs 中 object 的 width,height 说明 和 blocks 一样
+
+range 概率属性: 假设有 3 个奖品
+
+1. 如果 3 个奖品的 range 分别为 [10, 20, 30], 则中奖几率为 [10/60, 20/60, 30/60]
+2. 如果 3 个奖品的 range 分别为 [10, 0, 30], 则中奖几率为 [10/40, 0, 30/40]
+3. 如果 3 个奖品的 range 分别为 [0, null, undefined], 我此时会无视 range 属性
+   注意: 使用 range 属性时, stop 方法就不能传递中奖索引了, 否则 stop 传递的索引具有优先级, 我会无视你的中奖概率;
+
+关于设置奖品,如下
+
+- 奖品区域为扇形，会平分整个大转盘并以顺时针方向绘制，建议配置不同的背景色方便区分
+- 文字默认以扇形的中线居中，会自动随着扇形的旋转而旋转
+- 2 号扇形的 top 为 100%，所以他的文字超出了原本的区域
+
+<Preview>
+  <Story name='basicprizes'>
+    {{
+      components: { CDhnWheel },
+      data () {
+        return {
+          blocks: [{ padding: '10px', background: '#d64737' }],
+          prizes: [
+            { fonts: [{ text: '0' }], background: '#f8d384' },
+            { fonts: [{ text: '1', top: '20px' }], background: '#f9e3bb' },
+            { fonts: [{ text: '2', top: '100%' }], background: '#fff' }
+          ]
+        }
+      },
+      template: `<c-dhn-wheel
+                width="200px"
+                height="200px"
+                 :blocks="blocks"
+                :prizes="prizes"
+            >
+            </c-dhn-wheel>`
+    }}
+  </Story>
+</Preview>
+
+```javascript
+<template>
+  <c-dhn-wheel
+    width="200px"
+    height="200px"
+    :blocks="blocks"
+    :prizes="prizes"
+  />
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      blocks: [{ padding: '10px', background: '#d64737' }],
+      prizes: [
+        { fonts: [{ text: '0' }], background: '#f8d384' },
+        { fonts: [{ text: '1', top: '20px' }], background: '#f9e3bb' },
+        { fonts: [{ text: '2', top: '100%' }], background: '#fff' }
+      ],
+    }
+  }
+}
+</script>
+```
+
+关于奖品文字换行,如下
+
+- 由于奖品是一个扇形区域，顶部的圆弧宽度计算困难，建议搭配 top 属性向下挤一部分
+- wordWrap 属性用来控制该段文字是否换行，默认为 true，但等于 false 时依然可以使用\n 来换行
+- lengthLimit 属性用来控制自动换行的最大宽度，默认为'90%'
+
+<Preview>
+  <Story name='basicprizes1'>
+    {{
+      components: { CDhnWheel },
+      data () {
+        return {
+          blocks: [{ padding: '10px', background: '#d64737' }],
+          prizes: [
+            {
+              fonts: [
+                {
+                  text: '当文字超长之后就会自动进行换行',
+                  top: 10,
+                  lengthLimit: '80%'
+                }
+              ],
+              background: '#f8d384'
+            },
+            {
+              background: '#f9e3bb'
+            },
+            {
+              fonts: [{ text: '这段字不会自动换行', top: 20, wordWrap: false }],
+              background: '#f8d384'
+            },
+            {
+              background: '#f9e3bb'
+            }
+          ]
+        }
+      },
+      template: `<c-dhn-wheel
+                width="200px"
+                height="200px"
+                 :blocks="blocks"
+                :prizes="prizes"
+            >
+            </c-dhn-wheel>`
+    }}
+  </Story>
+</Preview>
+
+```javascript
+<template>
+  <c-dhn-wheel
+    width="200px"
+    height="200px"
+    :blocks="blocks"
+    :prizes="prizes"
+  />
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      blocks: [
+        { padding: '10px', background: '#d64737' },
+      ],
+      prizes: [
+        {
+          fonts: [{ text: '当文字超长之后就会自动进行换行', top: 10, lengthLimit: '80%' }],
+          background: '#f8d384'
+        },
+        {
+          background: '#f9e3bb'
+        },
+        {
+          fonts: [{ text: '这段字不会自动换行', top: 20, wordWrap: false }],
+          background: '#f8d384'
+        },
+        {
+          background: '#f9e3bb'
+        }
+      ],
+    }
+  }
+}
+</script>
+```
+
+关于配置图片,如下
+
+- 图片跟文字一样，会默认以扇形的中线居中
+- 不设置宽高就会展示原本图片的大小
+- 0 号扇形的图片设置了 80px \* 80px
+- 1 号扇形的图片只设置了宽度，那高度就会随着宽度进行等比缩放
+- 2 号扇形的图片同时设置了宽度和高度，所以他被拉伸了
+
+<Preview>
+  <Story name='basicprizes2'>
+    {{
+      components: { CDhnWheel },
+      data () {
+        return {
+          blocks: [{ padding: '10px', background: '#d64737' }],
+          prizes: [
+            {
+              imgs: [
+                { src: require('./zh.jpeg'), width: '80px', height: '80px' }
+              ],
+              background: '#f8d384'
+            },
+            {
+              imgs: [{ src: require('./zh.jpeg'), width: '30%' }],
+              background: '#f9e3bb'
+            },
+            {
+              imgs: [{ src: require('./zh.jpeg'), width: '40%', height: '50%' }]
+            }
+          ]
+        }
+      },
+      template: `<c-dhn-wheel
+                width="200px"
+                height="200px"
+                 :blocks="blocks"
+                :prizes="prizes"
+            >
+            </c-dhn-wheel>`
+    }}
+  </Story>
+</Preview>
+
+```javascript
+<template>
+  <c-dhn-wheel
+    width="200px"
+    height="200px"
+    :blocks="blocks"
+    :prizes="prizes"
+  />
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      blocks: [{ padding: '10px', background: '#d64737' }],
+      prizes: [
+        { imgs: [{ src: require('./zh.jpeg'),width:'80px',height:'80px' }], background: '#f8d384' },
+        { imgs: [{ src: require('./zh.jpeg'), width: '30%' }], background: '#f9e3bb' },
+        { imgs: [{ src: require('./zh.jpeg'), width: '40%', height: '50%' }] }
+      ],
+    }
+  }
+}
+</script>
+```
+
+## buttons 抽奖按钮
+
+- buttons?: Array< object > 抽奖按钮列表
+
+按钮属性
+
+<table width='100%'>
+  <thead>
+    <tr>
+      <th>属性</th>
+      <th>必填</th>
+      <th>说明</th>
+      <th>类型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>radius</td>
+      <td>true</td>
+      <td>string</td>
+      <td>按钮半径</td>
+    </tr>
+    <tr>
+      <td>pointer</td>
+      <td>false</td>
+      <td>boolean</td>
+      <td>是否显示指针 （默认为 false）</td>
+    </tr>
+    <tr>
+      <td>background</td>
+      <td>false</td>
+      <td>string</td>
+      <td> 按钮背景色 （可继承 defaultStyle 背景色，默认为 '#fff'）</td>
+    </tr>
+    <tr>
+      <td>fonts</td>
+      <td>false</td>
+      <td>Array[ object ]</td>
+      <td> 文字列表 </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan='3'>
+        <table width='100%'>
+          <thead>
+            <tr>
+              <th>属性</th>
+              <th>必填</th>
+              <th>说明</th>
+              <th>类型</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>text</td>
+              <td>true</td>
+              <td>字体内容 （可以使用 \n 用来换行）</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>top</td>
+              <td>false</td>
+              <td>距离顶部的高度 （格式为：20 | '20px' | '20%'，默认为 0）</td>
+              <td>string | number</td>
+            </tr>
+            <tr>
+              <td>fontColor</td>
+              <td>false</td>
+              <td> 字体颜色 （可继承 defaultStyle 字体颜色，默认为 '#000'）</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>fontSize</td>
+              <td>false</td>
+              <td>
+                字体大小(px) （可继承 defaultStyle 字体大小，默认为 '22px'）
+              </td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>fontStyle</td>
+              <td>false</td>
+              <td>
+                字体样式 （可继承 defaultStyle 字体样式，默认为 'sans-serif'）
+              </td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>fontWeight</td>
+              <td>false</td>
+              <td>字体粗细 （可继承 defaultStyle 字体粗细，默认为 '400'）</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>lineHeight</td>
+              <td>false</td>
+              <td>字体行高 （默认等于字体大小）</td>
+              <td>string</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>imgs</td>
+      <td>false</td>
+      <td>Arrary[ object ]</td>
+      <td> 图片列表</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan='3'>
+        <table width='100%'>
+          <thead>
+            <tr>
+              <th>属性</th>
+              <th>必填</th>
+              <th>说明</th>
+              <th>类型</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>src</td>
+              <td>true</td>
+              <td>图片路径</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>top</td>
+              <td>false</td>
+              <td>距离顶部的高度 （可以写 20px 也可以是 20%，默认为 0）</td>
+              <td>string | number</td>
+            </tr>
+            <tr>
+              <td>width</td>
+              <td>false</td>
+              <td> 图片宽度 （关于图片宽高有四种可能）</td>
+              <td>string</td>
+            </tr>
+            <tr>
+              <td>height</td>
+              <td>false</td>
+              <td>图片高度 （关于图片宽高有四种可能）</td>
+              <td>string</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+imgs 中 object 的 width,height 说明 和 blocks 一样
+
+关于配置按钮,如下
+
+- buttons 的绘制顺序为从上到下，所以要注意半径的大小，以免下面的按钮过大，把后面的按钮覆盖掉
+- pointer 属性控制 item 是否显示指针，如果你想要一个炫酷的指针，那你可以通过引入 img 的方式来实现
+- 我通常建议你在最后一个按钮里面绘制文字或图片，来避免被覆盖掉
+
+<Preview>
+  <Story name='basicprizes3'>
+    {{
+      components: { CDhnWheel },
+      data () {
+        return {
+          blocks: [
+            { padding: '10px', background: '#d64737' },
+            { padding: '0px', background: '#fff' }
+          ],
+          buttons: [
+            { radius: '40px', background: '#d64737' },
+            { radius: '35px', background: '#f6c66f', pointer: true },
+            {
+              radius: '30px',
+              background: '#fff',
+              fonts: [{ text: '开始', top: '-13px' }]
+            }
+          ]
+        }
+      },
+      template: `<c-dhn-wheel
+                width="200px"
+                height="200px"
+                :blocks="blocks"
+                :buttons="buttons"
+            >
+            </c-dhn-wheel>`
+    }}
+  </Story>
+</Preview>
+
+```javascript
+<template>
+  <c-dhn-wheel
+    width="200px"
+    height="200px"
+    :blocks="blocks"
+    :buttons="buttons"
+  />
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      blocks: [
+        { padding: '10px', background: '#d64737' },
+        { padding: '0px', background: '#fff' },
+      ],
+      buttons: [
+        { radius: '40px', background: '#d64737' },
+        { radius: '35px', background: '#f6c66f', pointer: true },
+        {
+          radius: '30px',
+          background: '#fff',
+          fonts: [{ text: '开始', top: '-13px' }]
+        }
+      ],
+    }
+  }
+}
+</script>
+```
+
+关于按钮文字换行,如下
+
+- 按钮文字不会自动换行，没有 wordWrap 和 lengthLimit 属性
+- 如果文字超出了按钮区域，你可以使用\n 进行手动换行
+
+<Preview>
+  <Story name='basicprizes4'>
+    {{
+      components: { CDhnWheel },
+      data () {
+        return {
+          blocks: [
+            { padding: '10px', background: '#d64737' },
+            { padding: '0px', background: '#fff' }
+          ],
+          buttons: [
+            { radius: '40px', background: '#d64737' },
+            { radius: '35px', background: '#f6c66f', pointer: true },
+            {
+              radius: '30px',
+              background: '#fff',
+              fonts: [
+                { text: '开始\n抽奖', top: '-20px' },
+                { text: '这是按钮文字', top: '20px' }
+              ]
+            }
+          ]
+        }
+      },
+      template: `<c-dhn-wheel
+                width="200px"
+                height="200px"
+                :blocks="blocks"
+                :buttons="buttons"
+            >
+            </c-dhn-wheel>`
+    }}
+  </Story>
+</Preview>
+
+```javascript
+<template>
+  <c-dhn-wheel
+    width="200px"
+    height="200px"
+    :blocks="blocks"
+    :buttons="buttons"
+  />
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      blocks: [
+        { padding: '10px', background: '#d64737' },
+        { padding: '0px', background: '#fff' },
+      ],
+      buttons: [
+        { radius: '40px', background: '#d64737' },
+        { radius: '35px', background: '#f6c66f', pointer: true },
+        {
+          radius: '30px',
+          background: '#fff',
+          fonts: [
+            { text: '开始\n抽奖', top: '-20px' },
+            { text: '这是按钮文字', top: '20px' }
+          ]
+        }
+      ],
+    }
+  }
+}
+</script>
+```
+
+## 回调函数 - callback
+
+<table width='100%'>
+  <thead>
+    <tr>
+      <th>属性</th>
+      <th>必填</th>
+      <th>说明</th>
+      <th>类型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>start</td>
+      <td>false</td>
+      <td>function</td>
+      <td>开始抽奖前 ()=>void</td>
+    </tr>
+    <tr>
+      <td>end</td>
+      <td>false</td>
+      <td>function</td>
+      <td>结束抽奖后 ()=>void</td>
+    </tr>
+  </tbody>
+</table>
+
+## 回调函数 - callback
+
+<table width='100%'>
+  <thead>
+    <tr>
+      <th>属性</th>
+      <th>必填</th>
+      <th>说明</th>
+      <th>类型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>play</td>
+      <td>true</td>
+      <td>function</td>
+      <td>开始抽奖 ()=>void</td>
+    </tr>
+    <tr>
+      <td>stop(index?:number)</td>
+      <td>false</td>
+      <td>function</td>
+      <td>结束抽奖后 ()=>void</td>
+    </tr>
+  </tbody>
+</table>
+
+### 这里写一个完整的例子，大家看一下
+
+<Preview>
+  <Story name='basicprizes5'>
+    {{
+      components: { CDhnWheel },
+      data () {
+        return {
+          blocks: [{ padding: '10px', background: '#869cfa' }],
+          prizes: [
+            {
+              background: '#e9e8fe',
+              name: '奖励0',
+              fonts: [{ text: '奖励0' }]
+            },
+            {
+              background: '#b8c5f2',
+              name: '奖励1',
+              fonts: [{ text: '奖励1' }]
+            },
+            {
+              background: '#e9e8fe',
+              name: '奖励2',
+              fonts: [{ text: '奖励2' }]
+            },
+            {
+              background: '#b8c5f2',
+              name: '奖励3',
+              fonts: [{ text: '奖励3' }]
+            },
+            {
+              background: '#e9e8fe',
+              name: '奖励4',
+              fonts: [{ text: '奖励4' }]
+            },
+            { background: '#b8c5f2', name: '奖励5', fonts: [{ text: '奖励5' }] }
+          ],
+          buttons: [
+            { radius: '40%', background: '#617df2' },
+            { radius: '35%', background: '#afc8ff' },
+            {
+              radius: '30%',
+              background: '#869cfa',
+              pointer: true,
+              fonts: [{ text: '开始', top: '-10px' }]
+            }
+          ]
+        }
+      },
+      methods: {
+        startCallBack () {
+          this.$refs.myLucky.play()
+          // 假设接口的请求速度是5s
+          setTimeout(_ => {
+            this.$refs.myLucky.stop(1)
+          }, 3000)
+        },
+        endCallBack (prizes) {
+          console.log(prizes)
+          alert(`恭喜获得${prizes.name}`)
+        }
+      },
+      template: `<c-dhn-wheel
+                width="200px"
+                height="200px"
+                :blocks="blocks"
+                :prizes="prizes"
+                :buttons="buttons"
+                @start="startCallBack"
+                @end="endCallBack"
+                ref="myLucky"
+            >
+            </c-dhn-wheel>`
+    }}
+  </Story>
+</Preview>
+
+```javascript
+<template>
+  <c-dhn-wheel
+      width="200px"
+      height="200px"
+      :blocks="blocks"
+      :prizes="prizes"
+      :buttons="buttons"
+      @start="startCallBack"
+      @end="endCallBack"
+      ref="myLucky"
+    >
+    </c-dhn-wheel>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      blocks: [{ padding: '10px', background: '#869cfa' }],
+      prizes: [
+            {
+              background: '#e9e8fe',
+              name: '奖励0',
+              fonts: [{ text: '奖励0' }]
+            },
+            {
+              background: '#b8c5f2',
+              name: '奖励1',
+              fonts: [{ text: '奖励1' }]
+            },
+            {
+              background: '#e9e8fe',
+              name: '奖励2',
+              fonts: [{ text: '奖励2' }]
+            },
+            {
+              background: '#b8c5f2',
+              name: '奖励3',
+              fonts: [{ text: '奖励3' }]
+            },
+            {
+              background: '#e9e8fe',
+              name: '奖励4',
+              fonts: [{ text: '奖励4' }]
+            },
+            { background: '#b8c5f2', name: '奖励5', fonts: [{ text: '奖励5' }] }
+      ],
+      buttons: [
+            { radius: '40%', background: '#617df2' },
+            { radius: '35%', background: '#afc8ff' },
+            {
+              radius: '30%',
+              background: '#869cfa',
+              pointer: true,
+              fonts: [{ text: '开始', top: '-10px' }]
+            }
+      ]
+    }
+  },
+  methods: {
+    startCallBack () {
+      this.$refs.myLucky.play()
+        // 假设接口的请求速度是5s
+      setTimeout(_ => {
+        this.$refs.myLucky.stop(1)
+      }, 3000)
+    },
+    endCallBack (prizes) {
+      console.log(prizes)
+      alert(`恭喜获得${prizes.name}`)
+    }
+  },
+}
+</script>
+```
+
+该组件 使用了 基础 lucky-canvas，想了解更多 你可以观看
+https://100px.net/docs/wheel.html

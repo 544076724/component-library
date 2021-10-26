@@ -1,0 +1,39 @@
+@import '../../../node_modules/dhn-swiper/swiper.scss'; 
+.c-dhn-swiper{
+    width: 100%;
+    .c-dhn-swiper__header{
+        padding: 0;
+        position: relative;
+    }
+
+    .c-dhn-swiper__nav{
+        // white-space: nowrap;
+        position: relative;
+        transition: transform .3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2;
+
+    }
+    .c-dhn-tabs__item{
+        padding: 0 2px;
+        box-sizing: border-box;
+        list-style: none;
+        font-size: 12px;
+        font-weight: 500;
+        position: relative;
+        outline: none;
+        &.is-active{
+            color: #409eff;
+        }
+    }
+    .c-dhn-swipers__content{
+        overflow: hidden;
+        position: relative;
+        padding-top: 15px;
+        .c-dhn-tab-pane{
+            text-align: center;
+        }
+    }
+}

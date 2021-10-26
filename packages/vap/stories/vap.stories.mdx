@@ -1,0 +1,82 @@
+import { Meta, Story, ArgsTable, Preview } from '@storybook/addon-docs/blocks'
+
+import CDhnVap from '../'
+
+import mp4 from './video.mp4'
+
+import jsonData from './vapc.json'
+
+<Meta title='DHNUIDOCS/CDhnVap mp4解析动画' />
+
+
+# Vap 动画解析
+
+
+<Preview>
+  <Story name='basic1'>
+      {{
+          data(){
+              return {
+                  option:{
+                    loop:true,
+                    src:mp4,
+                    config:jsonData
+                  }
+              }
+          },
+          components: { CDhnVap },
+          template:`<div style="position:relative;">
+              <div style="position:absolute;top:0px;color:#fff;">标题</div>
+              <div style="width:400px;height:400px">
+                <c-dhn-vap :options="option"></c-dhn-vap>
+              </div>
+              </div>`
+      }}
+  </Story>
+</Preview>
+
+```javascript
+<template>
+    <div style="position:relative;">
+        <div style="color:#fff;position:absolute;top:0px;">标题</div>
+        <div style="width:400px;height:400px">
+            <c-dhn-vap :options="option"></c-dhn-vap>
+        </div>
+    </div>
+</template>
+<script>
+<script>
+import mp4 from './video.mp4'
+import jsonData from './vapc.json'
+export default {
+  data () {
+    return {
+        return {
+                option:{
+                    loop:true,
+                    src:mp4,
+                    config:jsonData
+                }
+        }
+    }
+  },
+
+}
+</script>
+
+
+```
+
+
+该插件 借助了 VAP（Video Animation Player）是企鹅电竞开发，用于播放酷炫动画的实现方案。
+
+- 相比Webp, Apng动图方案，具有高压缩率(素材更小)、硬件解码(解码更快)的优点
+- 相比Lottie，能实现更复杂的动画效果(比如粒子特效)
+
+实现 原理可参考 https://github.com/Tencent/vap/blob/master/Introduction.md
+
+
+web端使用  可参考 https://github.com/Tencent/vap/tree/master/web
+### 参数说明
+
+<ArgsTable of={CDhnVap} />

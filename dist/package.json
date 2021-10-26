@@ -1,0 +1,23 @@
+{
+	"name": "c-dhn-act",
+	"version": "1.0.21",
+	"description": "c-dhn-act component",
+	"author": "peng.luo@asiainnovations.com>",
+	"main": "lib/index.cjs.js",
+	"module": "lib/index.esm.js",
+	"style": "lib/theme-chalk/index.css",
+	"typings": "lib/index.d.ts",
+	"keywords": [],
+	"license": "MIT",
+	"dependencies": {
+		"comutils": "1.1.9",
+		"dhn-swiper": "^1.0.0",
+		"lodash": "^4.17.21",
+		"vue-luck-draw": "^3.4.7",
+		"lottie-web": "^5.7.13",
+		"video-animation-player": "^0.2.9"
+	},
+	"peerDependencies": {
+		"vue": "^3.1.x"
+	}
+}

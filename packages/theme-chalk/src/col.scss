@@ -1,0 +1,30 @@
+@use "sass:math";
+//注册数学函数  1/24  分为24份
+.c-dhn-col{
+    text-align: center;
+    box-sizing: border-box;
+    &.is-guttered{
+      display: block;
+      min-height: 1px;
+    }
+    @for $i from 0 through 24 {
+      &.c-dhn-col-#{$i} {
+        max-width: (math.div(1,24) * $i * 100) * 1%;
+        flex: 0 0 (math.div(1,24) * $i * 100) * 1%;
+      }
+
+      &.c-dhn-col-offset-#{$i} {
+        margin-left: (math.div(1, 24) * $i * 100) * 1%;
+      }
+
+      &.c-dhn-col-pull-#{$i} {
+        position: relative;
+        right: (math.div(1, 24) * $i * 100) * 1%;
+      }
+
+      &.c-dhn-col-push-#{$i} {
+        position: relative;
+        left: (math.div(1, 24) * $i * 100) * 1%;
+      }
+    }
+  }
