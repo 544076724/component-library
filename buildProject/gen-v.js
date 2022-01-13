@@ -14,7 +14,7 @@ const promptList = [
   }
 ]
 const updataPkg = function () {
-  const pkg = require('../packages/c-dhn-act/package.json')
+  const pkg = require('../packages/el/package.json')
   const { dependencies, peerDependencies } = require('../package.json')
   fs.writeFileSync(
     path.resolve(__dirname, '../dist', 'package.json'),
@@ -24,7 +24,7 @@ const updataPkg = function () {
 inquirer.prompt(promptList).then(answers => {
   let pubVersion = answers.version
   if (pubVersion === 'beta') {
-    const { version } = require('../packages/c-dhn-act/package.json')
+    const { version } = require('../packages/el/package.json')
     let index = version.indexOf('beta')
     if (index != -1) {
       const vArr = version.split('.')
@@ -36,7 +36,7 @@ inquirer.prompt(promptList).then(answers => {
   }
   cp.exec(
     `npm version ${pubVersion}`,
-    { cwd: path.resolve(__dirname, '../packages/c-dhn-act') },
+    { cwd: path.resolve(__dirname, '../packages/el') },
     function (error, stdout, stderr) {
       if (error) {
         console.log(error)

@@ -1,5 +1,5 @@
 import { Meta, Story, Canvas, ArgsTable,Preview } from '@storybook/addon-docs/blocks'
-import CDhnAvatar from '../'
+import ElAvatar from '../'
 import '../../theme-chalk/src/avatar.scss'
 
 <Meta title='DHNUIDOCS/Avatar 头像' argTypes={{
@@ -13,12 +13,12 @@ export const Template  = (args) => ({
       args
     }
   },
-  components: { CDhnAvatar },
+  components: { ElAvatar },
   template: `
     <div style="width:40px;height:40px">
-      <c-dhn-avatar v-bind="args" @error="errorHandler">
+      <el-avatar v-bind="args" @error="errorHandler">
       <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
-      </c-dhn-avatar>
+      </el-avatar>
       </div>
   `,
   methods:{
@@ -76,18 +76,18 @@ export const Template  = (args) => ({
 ```javascript
 <template>
    <div style="width:40px;height:40px">
-      <c-dhn-avatar :src="src" size="small"></c-dhn-avatar>
+      <el-avatar :src="src" size="small"></el-avatar>
     </div>
     <div style="width:40px;height:40px">
-      <c-dhn-avatar :src="src" size="medium"></c-dhn-avatar>
+      <el-avatar :src="src" size="medium"></el-avatar>
     </div>
     <div style="width:40px;height:40px">
-      <c-dhn-avatar :src="src" size="large"></c-dhn-avatar>
+      <el-avatar :src="src" size="large"></el-avatar>
     </div>
     <div style="width:40px;height:40px">
-      <c-dhn-avatar :src="src" size="large" shape="square"></c-dhn-avatar>
+      <el-avatar :src="src" size="large" shape="square"></el-avatar>
     </div>
-    <c-dhn-avatar :src="src" :size="70" :shape="'square'"></c-dhn-avatar>
+    <el-avatar :src="src" :size="70" :shape="'square'"></el-avatar>
 </template>
 <script>
   export default {

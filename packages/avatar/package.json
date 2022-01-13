@@ -1,5 +1,5 @@
 {
-  "name": "@c-dhn-act/avatar",
+  "name": "@el/avatar",
   "version": "0.0.0",
   "description": "dhn-avatar component",
   "main": "dist/cjs/index.js",

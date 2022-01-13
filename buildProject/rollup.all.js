@@ -10,7 +10,7 @@ const paths = function(id){
 }
 module.exports = [
     { 
-        input: path.resolve(__dirname, '../packages/c-dhn-act/index.ts'),
+        input: path.resolve(__dirname, '../packages/el/index.ts'),
         output: [
           {
             exports: 'auto', //默认导出

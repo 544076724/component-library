@@ -18,7 +18,7 @@
 import { defineComponent, computed, ref, PropType, watch, toRef } from "vue"
 const ERROR_EVENT = "error"
 export default defineComponent({
-  name: "CDhnAvatar",
+  name: "ElAvatar",
   props: {
     /** 图片大小 "large"大小为“100%”, "medium"大小为“80%”, "small"大小为“50%” 或者 数字*/
     size: {

@@ -4,8 +4,8 @@ import typescript from 'rollup-plugin-typescript2'
 
 const { getPackagesSync } =  require('@lerna/project')
 
-module.exports = getPackagesSync().filter(pkg => pkg.name.includes('@c-dhn-act')).map(pkg => {
-  const name =  pkg.name.split('@c-dhn-act/')[1] //包名称
+module.exports = getPackagesSync().filter(pkg => pkg.name.includes('@el')).map(pkg => {
+  const name =  pkg.name.split('@el/')[1] //包名称
   return {
     input: path.resolve(__dirname, '../packages', name, 'index.ts'), //入口文件，形成依赖图的开始
     output: [ //出口  输出

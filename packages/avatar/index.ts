@@ -1,11 +1,11 @@
-import CDhnAvatar from './src/avatar.vue'
+import ElAvatar from './src/avatar.vue'
 import { App } from 'vue'
 import type { SFCWithInstall } from '../utils/types'
 
-CDhnAvatar.install = (app: App): void => {
-  app.component(CDhnAvatar.name, CDhnAvatar)
+ElAvatar.install = (app: App): void => {
+  app.component(ElAvatar.name, ElAvatar)
 }
 
-const _CDhnAvatar: SFCWithInstall<typeof CDhnAvatar> = CDhnAvatar
+const _ElAvatar: SFCWithInstall<typeof ElAvatar> = ElAvatar
 
-export default _CDhnAvatar
+export default _ElAvatar

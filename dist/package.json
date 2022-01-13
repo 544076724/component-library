@@ -1,6 +1,6 @@
 {
 	"name": "c-dhn-act",
-	"version": "1.0.21",
+	"version": "1.0.22",
 	"description": "c-dhn-act component",
 	"author": "peng.luo@asiainnovations.com>",
 	"main": "lib/index.cjs.js",
